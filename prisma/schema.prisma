@@ -48,6 +48,8 @@ model Lesson {
   courseId    Int
   Course      Course     @relation(fields: [courseId], references: [id])
   progresses  Progress[]
+  piece       String
+  position    Json
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 }
