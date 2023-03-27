@@ -10,6 +10,6 @@ usersRouter
   .get('/', getCourses)
   .get('/:id', getUserCourses)
   .post('/subscribe', subscribeCourse)
-  .delete('/subscribe', deleteSubscribe);
+  .delete('/subscribe/:subscriptionId', deleteSubscribe);
 
 export { usersRouter };
