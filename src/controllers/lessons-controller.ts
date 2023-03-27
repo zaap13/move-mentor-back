@@ -7,13 +7,13 @@ export async function getLesson(req: AuthenticatedRequest, res: Response): Promi
   const { userId } = req;
 
   const lesson = await lessonsService.getLesson(Number(id), userId);
-  res.json(lesson);
+  res.send(lesson);
 }
 
 export async function completeLesson(req: AuthenticatedRequest, res: Response): Promise<void> {
   const { id } = req.params;
   const { userId } = req;
 
-  await lessonsService.completeLesson({ userId, lessonId: Number(id) });
+  await lessonsService.completeLesson(Number(id), userId);
   res.sendStatus(200);
 }

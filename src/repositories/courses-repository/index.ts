@@ -31,10 +31,12 @@ async function findCoursesByUserId(userId: number) {
     progress: Math.round((course.subscriptions[0].progress / course.lessons.length) * 100),
   }));
 
-  console.log(coursesWithProgress);
+  return coursesWithProgress;
 }
 
 async function subscribeToCourse(userId: number, courseId: number) {
+  console.log('alo');
+
   const subscription = await prisma.subscription.create({
     data: {
       userId,

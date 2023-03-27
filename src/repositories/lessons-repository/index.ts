@@ -25,12 +25,12 @@ async function findLessonByIdWithProgress(lessonId: number, userId: number) {
   };
 }
 
-async function completeLesson(lessonId: number, userId: number) {
+async function completeLesson(id: number, userId: number) {
   const progress = await prisma.progress.create({
     data: {
       completed: true,
       userId: userId,
-      lessonId: lessonId,
+      lessonId: id,
     },
   });
 

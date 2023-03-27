@@ -3,13 +3,13 @@ import { Router } from 'express';
 import { getCourses, getUserCourses, subscribeCourse, deleteSubscribe } from '@/controllers';
 import { authenticateToken } from '@/middlewares';
 
-const usersRouter = Router();
+const coursesRouter = Router();
 
-usersRouter
+coursesRouter
   .all('/*', authenticateToken)
   .get('/', getCourses)
-  .get('/:id', getUserCourses)
+  .get('/subscribed', getUserCourses)
   .post('/subscribe', subscribeCourse)
   .delete('/subscribe/:subscriptionId', deleteSubscribe);
 
-export { usersRouter };
+export { coursesRouter };
