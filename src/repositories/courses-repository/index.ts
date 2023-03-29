@@ -13,25 +13,32 @@ async function findCoursesByUserId(userId: number) {
         },
       },
     },
-    include: {
-      lessons: true,
-      subscriptions: {
-        where: {
-          userId: userId,
-        },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      image: true,
+      lessons: {
         select: {
-          progress: true,
+          id: true,
+          title: true,
+          progresses: {
+            select: {
+              completed: true,
+            },
+            where: {
+              userId: userId,
+              completed: true,
+            },
+          },
         },
       },
     },
+    orderBy: {
+      createdAt: 'asc',
+    },
   });
-
-  const coursesWithProgress = courses.map((course) => ({
-    ...course,
-    progress: Math.round((course.subscriptions[0].progress / course.lessons.length) * 100),
-  }));
-
-  return coursesWithProgress;
+  return courses;
 }
 
 async function subscribeToCourse(userId: number, courseId: number) {

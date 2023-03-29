@@ -53,7 +53,7 @@ model Lesson {
   courseId    Int
   Course      Course     @relation(fields: [courseId], references: [id])
   progresses  Progress[]
-  piece       String
+  piece       String?
   position    Json?
   moves       Json?
   userColor   UserColor?
@@ -70,6 +70,8 @@ model Progress {
   Lesson    Lesson   @relation(fields: [lessonId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([userId, lessonId])
 }
 
 model Subscription {
@@ -81,4 +83,6 @@ model Subscription {
   progress  Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([userId, courseId])
 }

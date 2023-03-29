@@ -21,7 +21,7 @@ async function findLessonByIdWithProgress(lessonId: number, userId: number) {
 
   return {
     ...lesson,
-    completed: completed,
+    progresses: completed,
   };
 }
 
