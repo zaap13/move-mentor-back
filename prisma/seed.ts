@@ -126,14 +126,11 @@ async function main() {
             order: 7,
             piece: 'Chess',
             position: {
-              d4: 'wK',
-              d5: 'wP',
-              e4: 'bP',
-              e6: 'bR',
+              fen: 'rnbqkbnr/pppppp1p/6p1/4P3/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
             },
             moves: {
-              black: 'e7e5',
-              white: 'd5e6',
+              black: 'd7d5',
+              white: 'e5d6',
             },
             userColor: 'w',
             description:
