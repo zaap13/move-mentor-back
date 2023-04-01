@@ -57,6 +57,8 @@ describe('POST /users', () => {
       expect(response.body).toEqual({
         id: expect.any(Number),
         email: body.email,
+        image: body.image,
+        username: body.username,
       });
     });
 
