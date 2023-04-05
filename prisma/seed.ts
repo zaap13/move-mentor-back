@@ -3,6 +3,15 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
+  const user = await prisma.user.create({
+    data: {
+      email: 'seed@seed.com',
+      password: 'seed',
+      username: 'Seed',
+      image: 'https://mundoconectado.com.br/uploads/2022/05/25/25658/cacto.jpg',
+    },
+  });
+
   const course = await prisma.course.create({
     data: {
       title: 'Movimento das Peças',
@@ -10,6 +19,7 @@ async function main() {
         'Bem-vindo ao curso de movimentos de peças de xadrez. Neste curso, você aprenderá como mover cada uma das seis peças do xadrez: peão, torre, bispo, cavalo, dama e rei. Ao final do curso, você terá uma compreensão completa dos movimentos possíveis de cada peça.',
       image: 'https://adrenaline.com.br/uploads/chamadas/chess_alphazero_chamada.jpg',
       category: 'Tutorial',
+      creatorId: user.id,
     },
   });
 

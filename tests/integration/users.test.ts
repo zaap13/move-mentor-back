@@ -2,7 +2,6 @@ import app, { init } from '@/app';
 import { prisma } from '@/config';
 import { duplicatedEmailError } from '@/services/users-service';
 import { faker } from '@faker-js/faker';
-import dayjs from 'dayjs';
 import httpStatus from 'http-status';
 import supertest from 'supertest';
 import { createUser } from '../factories';

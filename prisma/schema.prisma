@@ -8,16 +8,17 @@ datasource db {
 }
 
 model User {
-  id            Int            @id @default(autoincrement())
-  email         String         @unique @db.VarChar(255)
-  password      String         @db.VarChar(255)
-  username      String         @db.VarChar(255)
-  image         String         @db.VarChar(255)
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  sessions      Session[]
-  subscriptions Subscription[]
-  Progress      Progress[]
+  id             Int            @id @default(autoincrement())
+  email          String         @unique @db.VarChar(255)
+  password       String         @db.VarChar(255)
+  username       String         @db.VarChar(255)
+  image          String         @db.VarChar(255)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  sessions       Session[]
+  subscriptions  Subscription[]
+  Progress       Progress[]
+  createdCourses Course[]       @relation("creator")
 }
 
 model Session {
@@ -39,6 +40,8 @@ model Course {
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   category      String
+  creatorId     Int
+  creator       User           @relation("creator", fields: [creatorId], references: [id])
 }
 
 enum UserColor {

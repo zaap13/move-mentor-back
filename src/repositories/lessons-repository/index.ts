@@ -33,8 +33,6 @@ async function completeLesson(id: number, userId: number) {
       lessonId: id,
     },
   });
-
-  console.log(progress);
 }
 
 const lessonsRepository = {

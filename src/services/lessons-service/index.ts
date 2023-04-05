@@ -1,8 +1,10 @@
 import { Lesson } from '.prisma/client';
 import lessonsRepository from '@/repositories/lessons-repository';
+import httpStatus from 'http-status';
 
 async function getLesson(id: number, userId: number): Promise<Lesson> {
   const lesson = await lessonsRepository.findLessonByIdWithProgress(id, userId);
+
   return lesson;
 }
 

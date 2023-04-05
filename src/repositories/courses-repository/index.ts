@@ -42,8 +42,6 @@ async function findCoursesByUserId(userId: number) {
 }
 
 async function subscribeToCourse(userId: number, courseId: number) {
-  console.log('alo');
-
   const subscription = await prisma.subscription.create({
     data: {
       userId,
