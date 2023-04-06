@@ -32,6 +32,10 @@ describe('Middleware authenticateToken', () => {
     course = await createCourse();
   });
   it('should allow access to the endpoint if the token is valid', async () => {
+    await server
+      .post('/courses/subscribe')
+      .set('Authorization', `Bearer ${validToken}`)
+      .send({ courseId: course.lessons[0].courseId });
     const response = await server.get(`/lesson/${course.lessons[0].id}`).set('Authorization', `Bearer ${validToken}`);
     expect(response.status).toBe(httpStatus.OK);
   });
@@ -63,10 +67,21 @@ describe('Lessons Controller', () => {
   describe('GET /lesson/:id', () => {
     it('should return a lesson if the user has access to it', async () => {
       const lesson = course.lessons[1];
+      await server
+        .post('/courses/subscribe')
+        .set('Authorization', `Bearer ${validToken}`)
+        .send({ courseId: course.lessons[1].courseId });
       const response = await server.get(`/lesson/${lesson.id}`).set('Authorization', `Bearer ${validToken}`);
 
       expect(response.status).toBe(httpStatus.OK);
       expect(response.body).toMatchObject({ id: lesson.id });
+    });
+
+    it('should return 403 if the user has no access to it', async () => {
+      const lesson = course.lessons[1];
+      const response = await server.get(`/lesson/${lesson.id}`).set('Authorization', `Bearer ${validToken}`);
+
+      expect(response.status).toBe(httpStatus.FORBIDDEN);
     });
 
     it('should return status 404 if the lesson does not exist', async () => {
@@ -82,9 +97,16 @@ describe('Lessons Controller', () => {
     it('should mark a lesson as completed for a given user', async () => {
       const lesson = course.lessons[0];
 
+      await server
+        .post('/courses/subscribe')
+        .set('Authorization', `Bearer ${validToken}`)
+        .send({ courseId: lesson.courseId });
+
       const response = await server.post(`/lesson/complete/${lesson.id}`).set('Authorization', `Bearer ${validToken}`);
+      const check = await server.get(`/lesson/${lesson.id}`).set('Authorization', `Bearer ${validToken}`);
 
       expect(response.status).toBe(httpStatus.OK);
+      expect(check.body.progresses).toBe(true);
     });
 
     it('should return status 404 if the lesson does not exist', async () => {
