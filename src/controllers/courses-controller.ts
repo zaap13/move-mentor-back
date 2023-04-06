@@ -11,6 +11,22 @@ export async function getCourses(req: AuthenticatedRequest, res: Response) {
   }
 }
 
+export async function postCourse(req: AuthenticatedRequest, res: Response) {
+  const { userId } = req;
+  const { title, description, image, category } = req.body;
+}
+
+export async function patchCourse(req: AuthenticatedRequest, res: Response) {
+  const { userId } = req;
+  const id = Number(req.params.id);
+  const { title, description, image, category } = req.body;
+}
+
+export async function deleteCourse(req: AuthenticatedRequest, res: Response) {
+  const { userId } = req;
+  const id = Number(req.params.id);
+}
+
 export async function getUserCourses(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
 

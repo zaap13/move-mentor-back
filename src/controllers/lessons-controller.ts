@@ -26,3 +26,19 @@ export async function completeLesson(req: AuthenticatedRequest, res: Response): 
     res.sendStatus(httpStatus.NOT_FOUND);
   }
 }
+
+export async function postLesson(req: AuthenticatedRequest, res: Response) {
+  const { userId } = req;
+  const { title, description, courseId, position, moves, messages, userColor } = req.body;
+}
+
+export async function patchLesson(req: AuthenticatedRequest, res: Response) {
+  const { userId } = req;
+  const id = Number(req.params.id);
+  const { title, description, courseId, position, moves, messages, userColor } = req.body;
+}
+
+export async function deleteLesson(req: AuthenticatedRequest, res: Response) {
+  const { userId } = req;
+  const id = Number(req.params.id);
+}

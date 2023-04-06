@@ -70,11 +70,49 @@ async function unsubscribeFromCourse(subscriptionId: number, userId: number) {
   return subscription;
 }
 
+async function createCourse(title: string, description: string, image: string, category: string, creatorId: number) {
+  const course = await prisma.course.create({
+    data: {
+      title,
+      description,
+      image,
+      category,
+      creator: {
+        connect: { id: creatorId },
+      },
+    },
+  });
+  return course;
+}
+
+async function updateCourse(id: number, title?: string, description?: string, image?: string, category?: string) {
+  const course = await prisma.course.update({
+    where: { id },
+    data: {
+      title,
+      description,
+      image,
+      category,
+    },
+  });
+  return course;
+}
+
+async function deleteCourse(id: number) {
+  const course = await prisma.course.delete({
+    where: { id },
+  });
+  return course;
+}
+
 const coursesRepository = {
   findCoursesByUserId,
   findCourses,
   subscribeToCourse,
   unsubscribeFromCourse,
+  createCourse,
+  updateCourse,
+  deleteCourse,
 };
 
 export default coursesRepository;
