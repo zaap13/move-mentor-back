@@ -1,13 +1,14 @@
 import { Response } from 'express';
 import coursesService from '@/services/courses-service';
 import { AuthenticatedRequest } from '@/middlewares';
+import httpStatus from 'http-status';
 
 export async function getCourses(req: AuthenticatedRequest, res: Response) {
   try {
     const courses = await coursesService.listCourses();
     res.send(courses);
   } catch (error) {
-    res.sendStatus(500);
+    res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
   }
 }
 
@@ -17,9 +18,12 @@ export async function postCourse(req: AuthenticatedRequest, res: Response) {
 
   try {
     const course = await coursesService.createCourse(title, description, image, category, userId);
-    res.status(200).send(course);
+    if (!course) {
+      return res.sendStatus(httpStatus.FORBIDDEN);
+    }
+    res.status(httpStatus.OK).send(course);
   } catch (error) {
-    res.sendStatus(500);
+    res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
   }
 }
 
@@ -29,10 +33,13 @@ export async function patchCourse(req: AuthenticatedRequest, res: Response) {
   const { title, description, image, category } = req.body;
 
   try {
-    const course = await coursesService.updateCourse(id, title, description, image, category);
-    res.sendStatus(200);
+    const course = await coursesService.updateCourse(id, title, description, image, category, userId);
+    if (!course) {
+      return res.sendStatus(httpStatus.FORBIDDEN);
+    }
+    res.status(httpStatus.OK).send(course);
   } catch (error) {
-    res.sendStatus(500);
+    res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
   }
 }
 
@@ -41,10 +48,13 @@ export async function deleteCourse(req: AuthenticatedRequest, res: Response) {
   const id = Number(req.params.id);
 
   try {
-    await coursesService.updateCourse(id);
-    res.sendStatus(200);
+    const course = await coursesService.deleteCourse(id, userId);
+    if (!course) {
+      return res.sendStatus(httpStatus.FORBIDDEN);
+    }
+    res.sendStatus(httpStatus.OK);
   } catch (error) {
-    res.sendStatus(500);
+    res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
   }
 }
 
@@ -55,7 +65,7 @@ export async function getUserCourses(req: AuthenticatedRequest, res: Response) {
     const courses = await coursesService.listUserCourses(Number(userId));
     res.send(courses);
   } catch (error) {
-    res.sendStatus(500);
+    res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
   }
 }
 
@@ -67,7 +77,7 @@ export async function subscribeCourse(req: AuthenticatedRequest, res: Response) 
     const subscription = await coursesService.subscribeToCourse(userId, courseId);
     res.send(subscription);
   } catch (error) {
-    res.sendStatus(500);
+    res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
   }
 }
 
@@ -77,8 +87,8 @@ export async function deleteSubscribe(req: AuthenticatedRequest, res: Response):
 
   try {
     await coursesService.unsubscribeFromCourse(subscriptionId, userId);
-    res.sendStatus(200);
+    res.sendStatus(httpStatus.OK);
   } catch (error) {
-    res.sendStatus(500);
+    res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
   }
 }

@@ -1,6 +1,6 @@
 import { Lesson, Prisma, UserColor } from '.prisma/client';
+import coursesRepository from '@/repositories/courses-repository';
 import lessonsRepository from '@/repositories/lessons-repository';
-import httpStatus from 'http-status';
 
 async function getLesson(id: number, userId: number): Promise<Lesson> {
   const lesson = await lessonsRepository.findLessonByIdWithProgress(id, userId);
@@ -20,7 +20,12 @@ async function createLesson(
   moves: string[],
   messages: Prisma.JsonValue,
   userColor: UserColor,
+  userId: number,
 ) {
+  const check = await coursesRepository.findCourse(courseId);
+  if (check.creatorId !== userId) {
+    return;
+  }
   const lesson = await lessonsRepository.addLesson(title, description, courseId, position, moves, messages, userColor);
   return lesson;
 }
@@ -34,7 +39,17 @@ async function updateLesson(
   moves: string[],
   messages: Prisma.JsonValue,
   userColor: UserColor,
+  userId: number,
 ) {
+  const checkLesson = await lessonsRepository.findLessonByIdWithProgress(id, userId);
+  const course = checkLesson.courseId;
+  if (course !== courseId) {
+    return;
+  }
+  const check = await coursesRepository.findCourse(courseId);
+  if (check.creatorId !== userId) {
+    return;
+  }
   const lesson = await lessonsRepository.updateLesson(
     id,
     title,
@@ -48,7 +63,13 @@ async function updateLesson(
   return lesson;
 }
 
-async function deleteLesson(id: number) {
+async function deleteLesson(id: number, userId: number) {
+  const checkLesson = await lessonsRepository.findLessonByIdWithProgress(id, userId);
+  const courseId = checkLesson.courseId;
+  const check = await coursesRepository.findCourse(courseId);
+  if (check.creatorId !== userId) {
+    return;
+  }
   const lesson = await lessonsRepository.deleteLesson(id);
   return lesson;
 }

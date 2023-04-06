@@ -15,12 +15,27 @@ async function createCourse(title: string, description: string, image: string, c
   return course;
 }
 
-async function updateCourse(id: number, title?: string, description?: string, image?: string, category?: string) {
+async function updateCourse(
+  id: number,
+  title: string,
+  description: string,
+  image: string,
+  category: string,
+  userId: number,
+) {
+  const check = await coursesRepository.findCourse(id);
+  if (check.creatorId !== userId) {
+    return;
+  }
   const course = await coursesRepository.updateCourse(id, title, description, image, category);
   return course;
 }
 
-async function deleteCourse(id: number) {
+async function deleteCourse(id: number, userId: number) {
+  const check = await coursesRepository.findCourse(id);
+  if (check.creatorId !== userId) {
+    return;
+  }
   const course = await coursesRepository.deleteCourse(id);
   return course;
 }

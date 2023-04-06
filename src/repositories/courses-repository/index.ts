@@ -4,6 +4,12 @@ async function findCourses() {
   return prisma.course.findMany();
 }
 
+async function findCourse(id: number) {
+  return prisma.course.findFirst({
+    where: { id },
+  });
+}
+
 async function findCoursesByUserId(userId: number) {
   const courses = await prisma.course.findMany({
     where: {
@@ -85,7 +91,13 @@ async function createCourse(title: string, description: string, image: string, c
   return course;
 }
 
-async function updateCourse(id: number, title?: string, description?: string, image?: string, category?: string) {
+async function updateCourse(
+  id: number,
+  title: string,
+  description: string,
+  image: string,
+  category: string,
+) {
   const course = await prisma.course.update({
     where: { id },
     data: {
@@ -95,6 +107,7 @@ async function updateCourse(id: number, title?: string, description?: string, im
       category,
     },
   });
+
   return course;
 }
 
@@ -113,6 +126,7 @@ const coursesRepository = {
   createCourse,
   updateCourse,
   deleteCourse,
+  findCourse,
 };
 
 export default coursesRepository;
