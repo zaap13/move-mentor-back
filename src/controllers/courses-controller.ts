@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import coursesService from '@/services/courses-service';
 import { AuthenticatedRequest } from '@/middlewares';
 
@@ -14,17 +14,38 @@ export async function getCourses(req: AuthenticatedRequest, res: Response) {
 export async function postCourse(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
   const { title, description, image, category } = req.body;
+
+  try {
+    const course = await coursesService.createCourse(title, description, image, category, userId);
+    res.status(200).send(course);
+  } catch (error) {
+    res.sendStatus(500);
+  }
 }
 
 export async function patchCourse(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
   const id = Number(req.params.id);
   const { title, description, image, category } = req.body;
+
+  try {
+    const course = await coursesService.updateCourse(id, title, description, image, category);
+    res.sendStatus(200);
+  } catch (error) {
+    res.sendStatus(500);
+  }
 }
 
 export async function deleteCourse(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
   const id = Number(req.params.id);
+
+  try {
+    await coursesService.updateCourse(id);
+    res.sendStatus(200);
+  } catch (error) {
+    res.sendStatus(500);
+  }
 }
 
 export async function getUserCourses(req: AuthenticatedRequest, res: Response) {
