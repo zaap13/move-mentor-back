@@ -2,6 +2,7 @@
 import { Response, NextFunction } from 'express';
 import { AuthenticatedRequest } from './authentication-middleware';
 import { prisma } from '@/config';
+import httpStatus, { FORBIDDEN } from 'http-status';
 
 export async function checkSubscription(req: AuthenticatedRequest, res: Response, next: NextFunction) {
   const id = parseInt(req.params.id);
@@ -14,7 +15,7 @@ export async function checkSubscription(req: AuthenticatedRequest, res: Response
   });
 
   if (!lesson) {
-    return res.sendStatus(404);
+    return res.sendStatus(httpStatus.NOT_FOUND);
   }
 
   const { courseId } = lesson;
@@ -27,7 +28,7 @@ export async function checkSubscription(req: AuthenticatedRequest, res: Response
   });
 
   if (!subscription) {
-    return res.status(403).send({ error: 'You need to subscribe to the course to access this content.' });
+    return res.status(FORBIDDEN).send({ error: 'You need to subscribe to the course to access this content.' });
   }
 
   next();

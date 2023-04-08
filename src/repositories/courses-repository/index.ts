@@ -91,13 +91,7 @@ async function createCourse(title: string, description: string, image: string, c
   return course;
 }
 
-async function updateCourse(
-  id: number,
-  title: string,
-  description: string,
-  image: string,
-  category: string,
-) {
+async function updateCourse(id: number, title: string, description: string, image: string, category: string) {
   const course = await prisma.course.update({
     where: { id },
     data: {
@@ -112,6 +106,9 @@ async function updateCourse(
 }
 
 async function deleteCourse(id: number) {
+  await prisma.lesson.deleteMany({
+    where: { courseId: id },
+  });
   const course = await prisma.course.delete({
     where: { id },
   });

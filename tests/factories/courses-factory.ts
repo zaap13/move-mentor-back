@@ -1,11 +1,9 @@
 import { prisma } from '@/config';
 import faker from '@faker-js/faker';
+import { User } from '@prisma/client';
 import { CourseWithLessons } from '../integration/lessons.test';
-import { createUser } from './users-factory';
 
-export async function createCourse() {
-  const user = await createUser();
-
+export async function createCourse(user: User) {
   const title = faker.lorem.words(3);
   const description = faker.lorem.sentence();
   const image = faker.image.imageUrl();

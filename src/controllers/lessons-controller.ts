@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import lessonsService from '@/services/lessons-service';
 import { AuthenticatedRequest } from '@/middlewares';
 import httpStatus from 'http-status';
@@ -7,24 +7,16 @@ export async function getLesson(req: AuthenticatedRequest, res: Response): Promi
   const { id } = req.params;
   const { userId } = req;
 
-  try {
-    const lesson = await lessonsService.getLesson(Number(id), userId);
-    res.send(lesson);
-  } catch (error) {
-    res.sendStatus(httpStatus.NOT_FOUND);
-  }
+  const lesson = await lessonsService.getLesson(Number(id), userId);
+  res.send(lesson);
 }
 
 export async function completeLesson(req: AuthenticatedRequest, res: Response): Promise<void> {
   const { id } = req.params;
   const { userId } = req;
 
-  try {
-    await lessonsService.completeLesson(Number(id), userId);
-    res.sendStatus(httpStatus.OK);
-  } catch (error) {
-    res.sendStatus(httpStatus.NOT_FOUND);
-  }
+  await lessonsService.completeLesson(Number(id), userId);
+  res.sendStatus(httpStatus.OK);
 }
 
 export async function postLesson(req: AuthenticatedRequest, res: Response) {
@@ -45,9 +37,9 @@ export async function postLesson(req: AuthenticatedRequest, res: Response) {
     if (!lesson) {
       return res.sendStatus(httpStatus.FORBIDDEN);
     }
-    res.status(httpStatus.OK).send(lesson);
+    res.status(httpStatus.CREATED).send(lesson);
   } catch (error) {
-    res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
+    res.sendStatus(httpStatus.NOT_FOUND);
   }
 }
 
@@ -56,38 +48,28 @@ export async function patchLesson(req: AuthenticatedRequest, res: Response) {
   const id = Number(req.params.id);
   const { title, description, courseId, position, moves, messages, userColor } = req.body;
 
-  try {
-    const lesson = await lessonsService.updateLesson(
-      id,
-      title,
-      description,
-      courseId,
-      position,
-      moves,
-      messages,
-      userColor,
-      userId,
-    );
-    if (!lesson) {
-      return res.sendStatus(httpStatus.FORBIDDEN);
-    }
-    res.status(httpStatus.OK).send(lesson);
-  } catch (error) {
-    res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
+  const lesson = await lessonsService.updateLesson(
+    id,
+    title,
+    description,
+    courseId,
+    position,
+    moves,
+    messages,
+    userColor,
+    userId,
+  );
+  if (!lesson) {
+    return res.sendStatus(httpStatus.NOT_FOUND);
   }
+  res.status(httpStatus.OK).send(lesson);
 }
 
 export async function deleteLesson(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
   const id = Number(req.params.id);
 
-  try {
-    const lesson = await lessonsService.deleteLesson(id, userId);
-    if (!lesson) {
-      return res.sendStatus(httpStatus.FORBIDDEN);
-    }
-    res.sendStatus(httpStatus.OK);
-  } catch (error) {
-    res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
-  }
+  const lesson = await lessonsService.deleteLesson(id, userId);
+
+  res.sendStatus(httpStatus.OK);
 }

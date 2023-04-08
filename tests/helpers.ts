@@ -22,3 +22,9 @@ export async function generateValidToken(user?: User) {
 
   return token;
 }
+
+export async function generateInvalidToken() {
+  const token = jwt.sign('randon', process.env.JWT_SECRET);
+
+  return token;
+}
