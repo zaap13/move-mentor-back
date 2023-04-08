@@ -5,7 +5,6 @@ import httpStatus from 'http-status';
 import supertest from 'supertest';
 import { createUser, createCourse } from '../factories';
 import { cleanDb, generateInvalidToken, generateValidToken } from '../helpers';
-import lessonsService from '@/services/lessons-service';
 
 export interface CourseWithLessons extends Course {
   lessons: Lesson[];

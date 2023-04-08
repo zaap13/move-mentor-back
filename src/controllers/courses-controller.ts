@@ -21,7 +21,7 @@ export async function patchCourse(req: AuthenticatedRequest, res: Response) {
   const { title, description, image, category } = req.body;
 
   const course = await coursesService.updateCourse(id, title, description, image, category);
-  
+
   res.status(httpStatus.OK).send(course);
 }
 
@@ -44,14 +44,20 @@ export async function getUserCourses(req: AuthenticatedRequest, res: Response) {
 export async function subscribeCourse(req: AuthenticatedRequest, res: Response) {
   const { courseId } = req.body;
   const { userId } = req;
-
-  const subscription = await coursesService.subscribeToCourse(userId, courseId);
-  res.send(subscription);
+  try {
+    const subscription = await coursesService.subscribeToCourse(userId, courseId);
+    res.send(subscription);
+  } catch (error) {
+    res.sendStatus(httpStatus.NOT_FOUND);
+  }
 }
 
 export async function deleteSubscribe(req: AuthenticatedRequest, res: Response): Promise<void> {
   const subscriptionId = Number(req.params.subscriptionId);
-
-  await coursesService.unsubscribeFromCourse(subscriptionId);
-  res.sendStatus(httpStatus.OK);
+  try {
+    await coursesService.unsubscribeFromCourse(subscriptionId);
+    res.sendStatus(httpStatus.OK);
+  } catch (error) {
+    res.sendStatus(httpStatus.NOT_FOUND);
+  }
 }

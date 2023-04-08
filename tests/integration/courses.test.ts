@@ -92,6 +92,13 @@ describe('Courses Controller', () => {
 
       await coursesService.unsubscribeFromCourse(response.body.id);
     });
+    it('should return status 404 if the course does not exist', async () => {
+      const response = await server
+        .post('/courses/subscribe')
+        .set('Authorization', `Bearer ${validToken}`)
+        .send({ courseId: 0 });
+      expect(response.status).toBe(httpStatus.NOT_FOUND);
+    });
     it('should return status 401 if there is no token in the header', async () => {
       const response = await server.post('/courses/subscribe');
       expect(response.status).toBe(httpStatus.UNAUTHORIZED);
@@ -124,6 +131,15 @@ describe('Courses Controller', () => {
       const subscribedCourse = await coursesService.listUserCourses(subscription.id);
       expect(subscribedCourse).toEqual([]);
     });
+
+    it('should return status 404 if the course does not exist', async () => {
+      const response = await server.delete(`/courses/subscribe/0`).set('Authorization', `Bearer ${validToken}`);
+      expect(response.status).toBe(httpStatus.NOT_FOUND);
+
+      const subscribedCourse = await coursesService.listUserCourses(subscription.id);
+      expect(subscribedCourse).toEqual([]);
+    });
+
     it('should return status 401 if there is no token in the header', async () => {
       const response = await server.delete(`/courses/subscribe/${subscription.id}`);
       expect(response.status).toBe(httpStatus.UNAUTHORIZED);
