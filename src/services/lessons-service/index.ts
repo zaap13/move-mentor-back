@@ -46,10 +46,7 @@ async function updateLesson(
   if (course !== courseId) {
     return;
   }
-  const check = await coursesRepository.findCourse(courseId);
-  if (check.creatorId !== userId) {
-    return;
-  }
+
   const lesson = await lessonsRepository.updateLesson(
     id,
     title,
@@ -66,12 +63,8 @@ async function updateLesson(
 async function deleteLesson(id: number, userId: number) {
   const checkLesson = await lessonsRepository.findLessonByIdWithProgress(id, userId);
   const courseId = checkLesson.courseId;
-  const check = await coursesRepository.findCourse(courseId);
-  if (check.creatorId !== userId) {
-    return;
-  }
-  const lesson = await lessonsRepository.deleteLesson(id);
-  return lesson;
+  await lessonsRepository.deleteLesson(id);
+  return;
 }
 
 const lessonsService = {

@@ -264,10 +264,6 @@ describe('Lessons Controller', () => {
     });
 
     it('should return status 404 if the course does not exist', async () => {
-      await server
-        .post('/courses/subscribe')
-        .set('Authorization', `Bearer ${validToken}`)
-        .send({ courseId: course.lessons[0].courseId });
       const invalidBody = { ...lessonData, courseId: 0 };
       const response = await server
         .patch(`/lesson/${course.lessons[0].id}`)
@@ -275,14 +271,15 @@ describe('Lessons Controller', () => {
         .send(invalidBody);
       expect(response.status).toBe(httpStatus.NOT_FOUND);
     });
+
+    it('should return status 404 if the lesson does not exist', async () => {
+      const response = await server.patch(`/lesson/0`).set('Authorization', `Bearer ${validToken}`).send(lessonData);
+      expect(response.status).toBe(httpStatus.NOT_FOUND);
+    });
   });
 
   describe('Delete /lesson/:id', () => {
     it('should delete the lesson with the specified id', async () => {
-      await server
-        .post('/courses/subscribe')
-        .set('Authorization', `Bearer ${validToken}`)
-        .send({ courseId: course.lessons[0].courseId });
       const response = await server
         .delete(`/lesson/${course.lessons[0].id}`)
         .set('Authorization', `Bearer ${validToken}`);
@@ -293,6 +290,12 @@ describe('Lessons Controller', () => {
         .set('Authorization', `Bearer ${validToken}`);
       expect(deletedCourse.status).toBe(httpStatus.NOT_FOUND);
     });
+
+    it('should return status 404 if the lesson does not exist', async () => {
+      const response = await server.delete(`/lesson/0`).set('Authorization', `Bearer ${validToken}`);
+      expect(response.status).toBe(httpStatus.NOT_FOUND);
+    });
+
     it('should return 403 if the user has no access to it', async () => {
       const alternativeToken = await generateValidToken();
       const response = await server

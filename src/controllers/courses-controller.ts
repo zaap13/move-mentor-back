@@ -17,14 +17,11 @@ export async function postCourse(req: AuthenticatedRequest, res: Response) {
 }
 
 export async function patchCourse(req: AuthenticatedRequest, res: Response) {
-  const { userId } = req;
   const id = Number(req.params.id);
   const { title, description, image, category } = req.body;
 
-  const course = await coursesService.updateCourse(id, title, description, image, category, userId);
-  if (!course) {
-    return res.sendStatus(httpStatus.FORBIDDEN);
-  }
+  const course = await coursesService.updateCourse(id, title, description, image, category);
+  
   res.status(httpStatus.OK).send(course);
 }
 
@@ -32,10 +29,8 @@ export async function deleteCourse(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
   const id = Number(req.params.id);
 
-  const course = await coursesService.deleteCourse(id, userId);
-  if (!course) {
-    return res.sendStatus(httpStatus.FORBIDDEN);
-  }
+  await coursesService.deleteCourse(id, userId);
+
   res.sendStatus(httpStatus.OK);
 }
 
@@ -56,8 +51,7 @@ export async function subscribeCourse(req: AuthenticatedRequest, res: Response) 
 
 export async function deleteSubscribe(req: AuthenticatedRequest, res: Response): Promise<void> {
   const subscriptionId = Number(req.params.subscriptionId);
-  const { userId } = req;
 
-  await coursesService.unsubscribeFromCourse(subscriptionId, userId);
+  await coursesService.unsubscribeFromCourse(subscriptionId);
   res.sendStatus(httpStatus.OK);
 }

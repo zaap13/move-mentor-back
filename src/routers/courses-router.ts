@@ -1,8 +1,17 @@
 import { Router } from 'express';
 
-import { getCourses, getUserCourses, subscribeCourse, deleteSubscribe, postCourse, patchCourse, deleteCourse } from '@/controllers';
+import {
+  getCourses,
+  getUserCourses,
+  subscribeCourse,
+  deleteSubscribe,
+  postCourse,
+  patchCourse,
+  deleteCourse,
+} from '@/controllers';
 import { authenticateToken, validateBody } from '@/middlewares';
 import { createCourseSchema } from '@/schemas/course-schema';
+import { courseOwnership } from '@/middlewares/check-ownership';
 
 const coursesRouter = Router();
 
@@ -13,7 +22,7 @@ coursesRouter
   .post('/subscribe', subscribeCourse)
   .delete('/subscribe/:subscriptionId', deleteSubscribe)
   .post('/', validateBody(createCourseSchema), postCourse)
-  .patch('/:id', validateBody(createCourseSchema), patchCourse)
-  .delete('/:id', deleteCourse);
+  .patch('/:id', courseOwnership, validateBody(createCourseSchema), patchCourse)
+  .delete('/:id', courseOwnership, deleteCourse);
 
 export { coursesRouter };

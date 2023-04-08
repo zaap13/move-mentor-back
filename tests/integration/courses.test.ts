@@ -62,7 +62,7 @@ describe('Courses Controller', () => {
       expect(response.body.length).toBe(1);
       expect(response.body[0].id).toBe(course.id);
 
-      await coursesService.unsubscribeFromCourse(subscription.id, user.id);
+      await coursesService.unsubscribeFromCourse(subscription.id);
     });
     it('should return status 401 if there is no token in the header', async () => {
       const response = await server.get('/courses/subscribed');
@@ -90,7 +90,7 @@ describe('Courses Controller', () => {
       expect(response.body.userId).toBe(user.id);
       expect(response.body.courseId).toBe(course.id);
 
-      await coursesService.unsubscribeFromCourse(response.body.id, user.id);
+      await coursesService.unsubscribeFromCourse(response.body.id);
     });
     it('should return status 401 if there is no token in the header', async () => {
       const response = await server.post('/courses/subscribe');
@@ -213,6 +213,12 @@ describe('Courses Controller', () => {
       expect(response.body.category).toBe(updatedCourse.category);
     });
 
+    it('should return status 404 if the course does not exist', async () => {
+      const response = await server.patch(`/courses/0`).set('Authorization', `Bearer ${validToken}`);
+
+      expect(response.status).toBe(httpStatus.NOT_FOUND);
+    });
+
     it('should return status 400 if there is no body', async () => {
       const response = await server.patch(`/courses/${course.id}`).set('Authorization', `Bearer ${validToken}`);
 
@@ -268,6 +274,13 @@ describe('Courses Controller', () => {
       const deletedCourse = await coursesService.listUserCourses(course.id);
       expect(deletedCourse).toEqual([]);
     });
+
+    it('should return status 404 if the course does not exist', async () => {
+      const response = await server.delete(`/courses/0`).set('Authorization', `Bearer ${validToken}`);
+
+      expect(response.status).toBe(httpStatus.NOT_FOUND);
+    });
+
     it('should return 403 if the user has no access to it', async () => {
       const alternativeToken = await generateValidToken();
       const response = await server.delete(`/courses/${course.id}`).set('Authorization', `Bearer ${alternativeToken}`);

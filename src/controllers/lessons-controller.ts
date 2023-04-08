@@ -69,7 +69,7 @@ export async function deleteLesson(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
   const id = Number(req.params.id);
 
-  const lesson = await lessonsService.deleteLesson(id, userId);
+  await lessonsService.deleteLesson(id, userId);
 
   res.sendStatus(httpStatus.OK);
 }

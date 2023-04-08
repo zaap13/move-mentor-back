@@ -15,29 +15,14 @@ async function createCourse(title: string, description: string, image: string, c
   return course;
 }
 
-async function updateCourse(
-  id: number,
-  title: string,
-  description: string,
-  image: string,
-  category: string,
-  userId: number,
-) {
-  const check = await coursesRepository.findCourse(id);
-  if (check.creatorId !== userId) {
-    return;
-  }
+async function updateCourse(id: number, title: string, description: string, image: string, category: string) {
   const course = await coursesRepository.updateCourse(id, title, description, image, category);
   return course;
 }
 
 async function deleteCourse(id: number, userId: number) {
-  const check = await coursesRepository.findCourse(id);
-  if (check.creatorId !== userId) {
-    return;
-  }
-  const course = await coursesRepository.deleteCourse(id);
-  return course;
+  await coursesRepository.deleteCourse(id);
+  return;
 }
 
 async function subscribeToCourse(userId: number, courseId: number) {
@@ -45,9 +30,9 @@ async function subscribeToCourse(userId: number, courseId: number) {
   return subscription;
 }
 
-async function unsubscribeFromCourse(userId: number, subscriptionId: number) {
-  const subscription = await coursesRepository.unsubscribeFromCourse(subscriptionId, userId);
-  return subscription;
+async function unsubscribeFromCourse(subscriptionId: number) {
+  await coursesRepository.unsubscribeFromCourse(subscriptionId);
+  return;
 }
 
 const coursesService = {

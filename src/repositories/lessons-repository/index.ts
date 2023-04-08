@@ -71,12 +71,15 @@ async function updateLesson(
 }
 
 async function deleteLesson(id: number) {
-  const deletedLesson = await prisma.lesson.delete({
+  await prisma.progress.deleteMany({
+    where: { lessonId: id },
+  });
+  await prisma.lesson.delete({
     where: {
       id: id,
     },
   });
-  return deletedLesson;
+  return;
 }
 
 const lessonsRepository = {

@@ -57,23 +57,13 @@ async function subscribeToCourse(userId: number, courseId: number) {
   return subscription;
 }
 
-async function unsubscribeFromCourse(subscriptionId: number, userId: number) {
-  const user = await prisma.subscription.findFirst({
-    where: {
-      userId: userId,
-    },
-  });
-
-  if (!user) {
-    return;
-  }
-
-  const subscription = await prisma.subscription.delete({
+async function unsubscribeFromCourse(subscriptionId: number) {
+  await prisma.subscription.delete({
     where: {
       id: subscriptionId,
     },
   });
-  return subscription;
+  return;
 }
 
 async function createCourse(title: string, description: string, image: string, category: string, creatorId: number) {
@@ -106,13 +96,19 @@ async function updateCourse(id: number, title: string, description: string, imag
 }
 
 async function deleteCourse(id: number) {
+  await prisma.subscription.deleteMany({
+    where: { courseId: id },
+  });
+  await prisma.progress.deleteMany({
+    where: { Lesson: { courseId: id } },
+  });
   await prisma.lesson.deleteMany({
     where: { courseId: id },
   });
-  const course = await prisma.course.delete({
+  await prisma.course.delete({
     where: { id },
   });
-  return course;
+  return;
 }
 
 const coursesRepository = {
