@@ -8,6 +8,17 @@ export async function getCourses(req: AuthenticatedRequest, res: Response) {
   res.send(courses);
 }
 
+export async function getCourse(req: AuthenticatedRequest, res: Response) {
+  const { userId } = req;
+  const id = Number(req.params.id);
+  try {
+    const course = await coursesService.findCourse(userId, id);
+    res.send(course);
+  } catch (error) {
+    res.sendStatus(httpStatus.NOT_FOUND);
+  }
+}
+
 export async function postCourse(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
   const { title, description, image, category } = req.body;

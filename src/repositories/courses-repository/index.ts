@@ -10,6 +10,17 @@ async function findCourse(id: number) {
   });
 }
 
+async function checkSub(id: number, courseId: number) {
+  const subscription = await prisma.subscription.findFirst({
+    where: {
+      userId: id,
+      courseId: courseId,
+    },
+  });
+
+  return Boolean(subscription);
+}
+
 async function findCoursesByUserId(userId: number) {
   const courses = await prisma.course.findMany({
     where: {
@@ -120,6 +131,7 @@ const coursesRepository = {
   updateCourse,
   deleteCourse,
   findCourse,
+  checkSub,
 };
 
 export default coursesRepository;

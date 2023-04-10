@@ -1,8 +1,19 @@
 import coursesRepository from '@/repositories/courses-repository';
+import httpStatus from 'http-status';
 
 async function listCourses() {
   const courses = await coursesRepository.findCourses();
   return courses;
+}
+
+async function findCourse(userId: number, id: number) {
+  const course = await coursesRepository.findCourse(id);
+  const subscribe = await coursesRepository.checkSub(userId, id);
+  if (!course) {
+    throw new Error();
+  }
+  const result = { ...course, subscribe };
+  return result;
 }
 
 async function listUserCourses(userId: number) {
@@ -43,6 +54,7 @@ const coursesService = {
   createCourse,
   updateCourse,
   deleteCourse,
+  findCourse,
 };
 
 export default coursesService;

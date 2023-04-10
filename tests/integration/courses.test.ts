@@ -52,6 +52,32 @@ describe('Courses Controller', () => {
     });
   });
 
+  describe('GET /courses/:id', () => {
+    it('should return expecific course', async () => {
+      const response = await server.get(`/courses/${course.id}`).set('Authorization', `Bearer ${validToken}`);
+      expect(response.status).toBe(httpStatus.OK);
+      expect(response.body).toMatchObject({ id: course.id });
+    });
+    it('should return status 404 if the course dont exists', async () => {
+      const response = await server.get(`/courses/0`).set('Authorization', `Bearer ${validToken}`);
+      expect(response.status).toBe(httpStatus.NOT_FOUND);
+    });
+    it('should return status 401 if there is no token in the header', async () => {
+      const response = await server.get(`/courses/${course.id}`);
+      expect(response.status).toBe(httpStatus.UNAUTHORIZED);
+    });
+    it('should return status 401 if the token is invalid', async () => {
+      const response = await server.get(`/courses/${course.id}`).set('Authorization', 'Bearer invalid_token');
+      expect(response.status).toBe(httpStatus.UNAUTHORIZED);
+    });
+    it('should return status 401 if there is no session corresponding to the token', async () => {
+      const invalidToken = generateInvalidToken();
+
+      const response = await server.get(`/courses/${course.id}`).set('Authorization', `Bearer ${invalidToken}`);
+      expect(response.status).toBe(httpStatus.UNAUTHORIZED);
+    });
+  });
+
   describe('GET /courses/subscribed', () => {
     it('should return all courses subscribed by the user', async () => {
       const subscription = await coursesService.subscribeToCourse(user.id, course.id);

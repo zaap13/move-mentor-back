@@ -8,6 +8,7 @@ import {
   postCourse,
   patchCourse,
   deleteCourse,
+  getCourse,
 } from '@/controllers';
 import { authenticateToken, validateBody } from '@/middlewares';
 import { createCourseSchema } from '@/schemas/course-schema';
@@ -19,6 +20,7 @@ coursesRouter
   .all('/*', authenticateToken)
   .get('/', getCourses)
   .get('/subscribed', getUserCourses)
+  .get('/:id', getCourse)
   .post('/subscribe', subscribeCourse)
   .delete('/subscribe/:subscriptionId', deleteSubscribe)
   .post('/', validateBody(createCourseSchema), postCourse)
