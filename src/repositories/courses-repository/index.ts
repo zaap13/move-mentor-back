@@ -7,6 +7,15 @@ async function findCourses() {
 async function findCourse(id: number) {
   return prisma.course.findFirst({
     where: { id },
+    include: {
+      lessons: {
+        select: {
+          id: true,
+          title: true,
+          description: true,
+        },
+      },
+    },
   });
 }
 
