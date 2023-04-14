@@ -27,7 +27,11 @@ async function checkSub(id: number, courseId: number) {
     },
   });
 
-  return Boolean(subscription);
+  if (!subscription) {
+    return null;
+  }
+
+  return subscription;
 }
 
 async function findCoursesByUserId(userId: number) {

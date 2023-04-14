@@ -12,7 +12,7 @@ async function findCourse(userId: number, id: number) {
   if (!course) {
     throw new Error();
   }
-  const result = { ...course, subscribe };
+  const result = { ...course, subscribe: subscribe?.id };
   return result;
 }
 
