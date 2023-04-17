@@ -1,11 +1,17 @@
+networks:
+  movementor:
+      name: movementor
+      driver: bridge
+
 services:
   postgres:
     image: postgres
     container_name: postgres
+    restart: always
     networks:
       - movementor
     ports:
-      - 5432:5432
+      - 5433:5432
     env_file:
       - .env.development
     environment:
@@ -20,18 +26,13 @@ services:
     networks:
       - movementor
     ports: 
-      - 4000/4000
+      - 4000:4000
     depends_on:
       - postgres
     env_file:
       - .env.development
     environment:
       - NODE_ENV=development
-
-networks:
-  movementor:
-      name: movementor
-      driver: bridge
 
 volumes:
   postgres-volume:      
