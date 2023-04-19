@@ -1,12 +1,6 @@
-# Projeto XYZ
+# API MoveMentor
 
-Este é um projeto para gerenciamento de cursos online.
-
-## Instalação
-
-1. Clone o repositório do projeto.
-2. Instale as dependências com o comando `npm install`.
-3. Inicie o servidor com o comando `npm start`.
+API para gerenciamento de cursos, lições e usuários da plataforma MoveMentor.
 
 ## Rotas
 
