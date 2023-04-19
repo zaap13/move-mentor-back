@@ -15,7 +15,7 @@ API para gerenciamento de cursos, lições e usuários da plataforma MoveMentor.
 
 - POST /users
   - Cria um novo usuário.
-  - Corpo da requisição: `{ "name": string, "email": string, "password": string }`
+  - Corpo da requisição: `{ "username": string, "image": string "email": string, "password": string }`
   - Retorna os dados do usuário criado.
 
 ### Cursos
@@ -54,20 +54,20 @@ API para gerenciamento de cursos, lições e usuários da plataforma MoveMentor.
 - POST /courses
 
   - Cria um novo curso.
-  - Corpo da requisição: `{ "name": string, "description": string, "price": number }`
-  - Requer autenticação como administrador.
+  - Corpo da requisição: `{ "title": string, "description": string, "image": string, "category": string }`
+  - Requer autenticação.
   - Retorna os dados do curso criado.
 
 - PATCH /courses/:id
 
   - Atualiza os dados de um curso existente.
-  - Corpo da requisição: `{ "name": string, "description": string, "price": number }`
-  - Requer autenticação como administrador ou proprietário do curso.
+  - Corpo da requisição: `{ "title": string, "description": string, "image": string, "category": string }`
+  - Requer autenticação como proprietário do curso.
   - Retorna os dados do curso atualizado.
 
 - DELETE /courses/:id
   - Exclui um curso existente.
-  - Requer autenticação como administrador ou proprietário do curso.
+  - Requer autenticação como proprietário do curso.
   - Retorna os dados do curso excluído.
 
 ### Lições
@@ -87,18 +87,18 @@ API para gerenciamento de cursos, lições e usuários da plataforma MoveMentor.
 - POST /lessons
 
   - Cria uma nova lição para um curso.
-  - Corpo da requisição: `{ "title": string, "description": string, "videoUrl": string, "courseId": string }`
-  - Requer autenticação como administrador ou proprietário do curso correspondente.
+  - Corpo da requisição: `{ "title": string, "description": string, "position": string, "courseId": number, "userColor": string, "moves": array. "messages": object}`
+  - Requer autenticação como proprietário do curso correspondente.
   - Retorna os dados da lição criada.
 
 - PATCH /lessons/:id
 
   - Atualiza os dados de uma lição existente.
-  - Corpo da requisição: `{ "title": string, "description": string, "videoUrl": string }`
-  - Requer autenticação como administrador ou proprietário da lição.
+  - Corpo da requisição: `{ "title": string, "description": string, "position": string, "courseId": number, "userColor": string, "moves": array. "messages": object}`
+  - Requer autenticação como proprietário da lição.
   - Retorna os dados da lição atualizada.
 
 - DELETE /lessons/:id
   - Exclui uma lição existente.
-  - Requer autenticação como administrador ou proprietário da lição.
+  - Requer autenticação como proprietário da lição.
   - Retorna os dados da lição excluída.
