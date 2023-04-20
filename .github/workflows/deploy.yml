@@ -19,7 +19,7 @@ jobs:
           envkey_POSTGRES_PORT: ${{secrets.POSTGRES_PORT}}
           envkey_POSTGRES_DB: ${{secrets.POSTGRES_DB}}
           envkey_JWT_SECRET: ${{secrets.JWT_SECRET}}
-          envkey_DATABASE_URL: "postgresql://${POSTGRES_USERNAME}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?schema=public"
+          envkey_DATABASE_URL: ${{secrets.DATABASE_URL}}
           file_name: .env.development
           fail_on_empty: true
       - name: Build
