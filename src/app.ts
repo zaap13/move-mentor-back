@@ -7,17 +7,13 @@ import { loadEnv, connectDb, disconnectDB } from '@/config';
 
 loadEnv();
 
-import { usersRouter, authenticationRouter, coursesRouter, lessonsRouter } from '@/routers';
+import { } from '@/routers';
 
 const app = express();
 app
   .use(cors())
   .use(express.json())
   .get('/health', (_req, res) => res.send('OK!'))
-  .use('/users', usersRouter)
-  .use('/courses', coursesRouter)
-  .use('/lesson', lessonsRouter)
-  .use('/auth', authenticationRouter);
 
 export function init(): Promise<Express> {
   connectDb();
